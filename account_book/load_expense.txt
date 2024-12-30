@@ -1,0 +1,55 @@
+Sub CategorizeDataByMonthAndType()
+    Dim wbSource As Workbook
+    Dim wsSource As Worksheet
+    Dim wbDest As Workbook
+    Dim wsDest As Worksheet
+    Dim lastRow As Long
+    Dim i As Long
+    Dim dateValue As Date
+    Dim monthYear As String
+    Dim typeValue As String
+    Dim amountValue As Double
+    Dim destRow As Long
+    
+    ' 외부 파일 열기
+    Set wbSource = Workbooks.Open("C:\경로\파일명.xlsx", UpdateLinks:=False)
+    Set wsSource = wbSource.Sheets(1) ' 첫 번째 시트에서 데이터 불러오기
+    
+    ' 결과를 저장할 새로운 워크북 만들기
+    Set wbDest = Workbooks.Add
+    Set wsDest = wbDest.Sheets(1)
+    
+    ' 제목 행 설정 (결과 시트에 제목 추가)
+    wsDest.Cells(1, 1).Value = "월-타입"
+    wsDest.Cells(1, 2).Value = "내용"
+    wsDest.Cells(1, 3).Value = "금액"
+    destRow = 2 ' 데이터는 두 번째 행부터 입력
+    
+    ' 데이터 범위에서 마지막 행 찾기
+    lastRow = wsSource.Cells(wsSource.Rows.Count, 1).End(xlUp).Row
+    
+    ' 데이터 처리: 날짜, 타입, 내용, 금액 열을 순차적으로 읽기
+    For i = 2 To lastRow ' 2행부터 시작 (첫 번째 행은 헤더)
+        dateValue = wsSource.Cells(i, 1).Value
+        typeValue = wsSource.Cells(i, 2).Value
+        amountValue = wsSource.Cells(i, 4).Value
+        
+        ' 월-년 정보를 추출 (예: "2024-01" 형식)
+        monthYear = Format(dateValue, "yyyy-mm")
+        
+        ' 월별-타입별로 데이터 정리 (월-타입 컬럼)
+        wsDest.Cells(destRow, 1).Value = monthYear & "-" & typeValue
+        wsDest.Cells(destRow, 2).Value = wsSource.Cells(i, 3).Value ' 내용
+        wsDest.Cells(destRow, 3).Value = amountValue ' 금액
+        
+        destRow = destRow + 1 ' 다음 행으로 이동
+    Next i
+    
+    ' 결과 워크북 저장
+    wbDest.SaveAs "C:\경로\결과파일.xlsx"
+    
+    ' 외부 엑셀 파일 닫기 (저장하지 않음)
+    wbSource.Close SaveChanges:=False
+    
+    MsgBox "데이터가 월별로 분류되었습니다."
+End Sub
