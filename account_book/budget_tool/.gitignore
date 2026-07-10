@@ -1,0 +1,7 @@
+# 무시할 파일
+__pycache__/
+*.pyc
+.streamlit/
+
+# 포터블 배포 산출물
+portable_build/
