@@ -7,18 +7,36 @@
 
 ## 실행
 
+### 🚀 빠른 시작
+
+Python이 설치되어 있다면:
+
 ```
 run.bat            # 더블클릭 (Windows)
 ```
 
-또는:
+브라우저에서 자동으로 열리며, 기본 주소는 http://localhost:8501 입니다.
+
+### 📦 첫 실행 시 - 패키지 설치
+
+Python이 설치되어 있지만 필요한 패키지가 없다면:
+
+```
+install.bat        # 더블클릭 (첫 실행 시만)
+```
+
+또는 수동으로:
 
 ```
 python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-브라우저에서 자동으로 열리며, 기본 주소는 http://localhost:8501 입니다.
+### ⚠️ 요구사항
+
+- **Python 3.9 이상** 필수
+  - [python.org](https://www.python.org)에서 설치
+  - **설치 시 "Add Python to PATH" 옵션 반드시 선택** ✅
 
 ## Python이 없는 PC에서 실행 (git clone → 더블클릭)
 
