@@ -20,31 +20,33 @@ python -m streamlit run app.py
 
 브라우저에서 자동으로 열리며, 기본 주소는 http://localhost:8501 입니다.
 
-## Python이 없는 PC에서 실행 (포터블 배포)
+## Python이 없는 PC에서 실행 (git clone → 더블클릭)
 
-Python이 설치되지 않은 Windows PC에서도 **설치 없이** 실행할 수 있는 포터블 폴더를
-만들 수 있습니다. Windows 임베디드 Python과 필요한 패키지를 폴더 하나에 담습니다.
+Python이 설치되지 않은 Windows PC에서도 **별도 설치 없이** 실행할 수 있습니다.
+저장소 상위 폴더(`account_book`)의 **`가계부_실행.bat`** 을 더블클릭하면 됩니다.
 
-### 만들기 (개발 PC에서 1회)
+### 사용 방법
 
-```
-powershell -ExecutionPolicy Bypass -File .\build_portable.ps1
-```
+1. `git clone` 으로 저장소를 받습니다.
+2. `account_book\가계부_실행.bat` 을 **더블클릭**합니다.
+3. **최초 1회**: 파이썬 런타임(`runtime\`)이 없으므로 자동으로 내려받아 구성합니다.
+   (인터넷 필요, 수 분 소요 — 이 준비는 처음 한 번만 진행됩니다.)
+4. 준비가 끝나면 브라우저가 자동으로 열립니다. 두 번째 실행부터는 즉시 시작됩니다.
+5. 검은 콘솔 창을 닫으면 종료됩니다.
 
-`..\portable_build\가계부_포터블\` 폴더가 생성됩니다(약 450MB). 인터넷에서
-임베디드 Python과 패키지를 내려받으므로 최초 1회는 네트워크가 필요합니다.
+내 거래내역으로 바꾸려면 `지출내역` 폴더에 뱅크샐러드 파일을 넣고 다시 실행하면
+자동으로 반영됩니다. 준비 이후에는 인터넷 없이 PC 안에서만 동작합니다.
 
-### 전달 / 실행 (비개발자 PC에서)
+### 동작 방식 (중복 없는 구조)
 
-1. 생성된 `가계부_포터블` 폴더를 zip으로 압축해 대상 PC로 복사합니다.
-2. 압축을 풀고 **`가계부_실행.bat`을 더블클릭**합니다.
-3. 검은 콘솔 창이 뜨고 잠시 후 브라우저가 자동으로 열립니다. 창을 닫으면 종료됩니다.
+- 임베디드 파이썬은 `account_book\runtime\` 에 구성되며, 앱 코드(`budget_tool`)와
+  데이터(`지출내역`)를 **복사하지 않고 그대로** 실행합니다. (배포용 사본 폴더 없음)
+- 용량이 큰 `runtime\` 은 **Git에 포함되지 않고**(`.gitignore`), clone 후 첫 실행 시
+  `setup_runtime.ps1` 이 자동으로 생성합니다.
+- 설치되는 패키지 버전은 `requirements.txt` 에 고정되어 어느 PC에서든 동작이 같습니다.
 
-내 거래내역으로 바꾸려면 포터블 폴더의 `지출내역`에 뱅크샐러드 파일을 넣고 다시
-실행하면 됩니다. Python 설치·인터넷 연결 없이 PC 안에서만 동작합니다.
-
-> 포터블은 검증된 개발 환경과 **동일한 패키지 버전**(`requirements.txt`에 고정)으로
-> 빌드되어 동작이 일치합니다. `portable_build/`는 Git에 포함되지 않습니다.
+> 이미 Python이 설치된 개발 PC라면 위 `run.bat`(또는 `streamlit run app.py`)으로
+> 바로 실행할 수 있으며, 런타임 자동 구성 과정은 필요 없습니다.
 
 ## 사용 방법
 
@@ -89,7 +91,9 @@ powershell -ExecutionPolicy Bypass -File .\build_portable.ps1
 | `aggregate.py` | 월별·손익·재무·연도추이 집계 로직 |
 | `storage.py` | 작업본 CSV/JSON 저장·로드, 다연도 통합 로드 |
 | `app.py` | Streamlit UI (연도 목차 + 5개 탭) |
-| `build_portable.ps1` | Python 없는 PC용 포터블 배포본 생성 스크립트 |
+
+> 저장소 상위 `account_book\` 에는 Python 미설치 PC용 실행 파일이 있습니다:
+> `가계부_실행.bat`(진입점), `setup_runtime.ps1`(런타임 자동 구성), `_freeport.py`(빈 포트 탐색).
 
 ## 기존 VBA와의 대응
 
